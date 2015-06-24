@@ -3,13 +3,27 @@ using System.Collections;
 
 public class CameraController : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
+    // Singleton Pattern
+
+    private static CameraController _inst;
+    public static CameraController Inst { get { return _inst; } }
+
+    void Awake()
+    {
+        _inst = this;
+    }
+
+
+
+	
+	void Start () 
+    {
 	
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	
+	void Update () 
+    {
 	
 	}
 }

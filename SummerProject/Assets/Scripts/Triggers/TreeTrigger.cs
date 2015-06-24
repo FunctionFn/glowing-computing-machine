@@ -7,13 +7,14 @@ public class TreeTrigger : Trigger {
     {
         base.OnActivate();
 
-        PlayerController.Inst.ChangeMovementState(PlayerController.Inst.TetheredMovement);
+        PlayerController.Inst.SetNearTree(true);
     }
 
     public override void OnDeactivate()
     {
         base.OnDeactivate();
 
+        PlayerController.Inst.SetNearTree(false);
         PlayerController.Inst.ChangeMovementState(PlayerController.Inst.GroundedMovement);
     }
 

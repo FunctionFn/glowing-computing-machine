@@ -3,11 +3,22 @@ using System.Collections;
 
 public class PlayerController : MonoBehaviour {
 
+    public GameObject mainCamera;
+    public GameObject fireballPrefab;
+
+    public Transform rightSide;
+    public Transform fireballSpawnLocation;
+
+
     public float speed;
     public float jumpSpeed;
     public float ascendSpeed;
     public float descendSpeed;
     public float gravity;
+
+    public float fireballSpeed;
+    public float fireballDamage;
+    public float fireballUpOffset;
 
     public float lookSpeedH;
     public float lookSpeedV;
@@ -16,8 +27,8 @@ public class PlayerController : MonoBehaviour {
     private float lookDirectionV;
     CharacterController controller;
 
-    public GameObject mainCamera;
-    public Transform rightSide;
+    
+    
 
     private Vector3 cameraRotationAxis;
 
@@ -30,6 +41,8 @@ public class PlayerController : MonoBehaviour {
     public int TetheredMovement = 2;
 
     public int movementState;
+
+    private bool bIsNearTree;
 
     // Singleton Pattern
 
@@ -48,6 +61,8 @@ public class PlayerController : MonoBehaviour {
         controller = GetComponent<CharacterController>();
 
         ChangeMovementState(movementState);
+
+        bIsNearTree = false;
 	}
 	
 	// Update is called once per frame
@@ -56,6 +71,9 @@ public class PlayerController : MonoBehaviour {
         //Update Movement
 
         ControlUpdate();
+
+        PowerUpdate();
+
 
     }
     
@@ -83,6 +101,10 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    public void SetNearTree(bool near)
+    {
+        bIsNearTree = near;
+    }
 
     void ControlUpdate()
     {
@@ -106,6 +128,12 @@ public class PlayerController : MonoBehaviour {
             controller.Move(moveDirection * Time.deltaTime);
 
             CameraControl();
+
+            if (Input.GetButtonDown("Tether") && bIsNearTree)
+            {
+                Tether();
+            }
+
         }
         else if (movementState == TetheredMovement)
         {
@@ -123,6 +151,11 @@ public class PlayerController : MonoBehaviour {
             controller.Move(moveDirection * Time.deltaTime);
 
             CameraControl();
+
+            if (Input.GetButtonDown("Tether") && bIsNearTree)
+            {
+                UnTether();
+            }
 
         }
         
@@ -174,5 +207,29 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
+    // Powers
 
+    void PowerUpdate()
+    {
+        if (Input.GetButtonDown("Fire"))
+        {
+            Fireball();
+        }
+    }
+
+    void Fireball()
+    {
+        GameObject go = (GameObject)Instantiate(fireballPrefab, fireballSpawnLocation.position, mainCamera.transform.rotation);
+        go.GetComponent<Rigidbody>().velocity =  (mainCamera.transform.forward + mainCamera.transform.up * fireballUpOffset) * fireballSpeed;
+    }
+
+    void Tether()
+    {
+        ChangeMovementState(TetheredMovement);
+    }
+
+    void UnTether()
+    {
+        ChangeMovementState(GroundedMovement);
+    }
 }
