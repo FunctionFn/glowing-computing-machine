@@ -5,10 +5,13 @@ public class PlayerController : MonoBehaviour {
 
     public GameObject mainCamera;
     public GameObject fireballPrefab;
+    public GameObject windPrefab;
 
     public Transform rightSide;
     public Transform fireballSpawnLocation;
+    public Transform windSpawnLocation;
 
+    private GameObject tempWind;
 
     public float speed;
     public float jumpSpeed;
@@ -26,8 +29,6 @@ public class PlayerController : MonoBehaviour {
     private Vector3 lookDirectionH = Vector3.zero;
     private float lookDirectionV;
     CharacterController controller;
-
-    
     
 
     private Vector3 cameraRotationAxis;
@@ -63,6 +64,8 @@ public class PlayerController : MonoBehaviour {
         ChangeMovementState(movementState);
 
         bIsNearTree = false;
+
+        Physics.IgnoreLayerCollision(12, gameObject.layer);
 	}
 	
 	// Update is called once per frame
@@ -215,6 +218,16 @@ public class PlayerController : MonoBehaviour {
         {
             Fireball();
         }
+        
+        if (Input.GetButtonDown("Wind"))
+        {
+            tempWind = WindBlow();
+        }
+
+        if (Input.GetButtonUp("Wind"))
+        {
+            UnWindBlow(tempWind);
+        }
     }
 
     void Fireball()
@@ -231,5 +244,20 @@ public class PlayerController : MonoBehaviour {
     void UnTether()
     {
         ChangeMovementState(GroundedMovement);
+    }
+
+    GameObject WindBlow()
+    {
+        GameObject go = (GameObject)Instantiate(windPrefab, windSpawnLocation.position, mainCamera.transform.rotation);
+
+        go.transform.Rotate(new Vector3(350, 0, 0));
+        go.transform.parent = mainCamera.transform;
+
+        return go;
+    }
+
+    void UnWindBlow(GameObject go)
+    {
+        Destroy(go.gameObject);
     }
 }
