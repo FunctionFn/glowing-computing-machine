@@ -6,7 +6,7 @@ public class Fireball : MonoBehaviour {
     public LayerMask whatIsSolid;
 
 	void Start () {
-	
+	    
 	}
 
     void OnTriggerEnter(Collider other)
