@@ -1,32 +1,52 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿//using UnityEngine;
+//using System.Collections;
 
 public class IdleState : StateBasicEnemy {
 
-    //singleton pattern
-    private static IdleState _inst;
-    public static IdleState Inst { get { return _inst; } }
+   
+   private static IdleState instance;
 
-    void Awake()
+   public static IdleState getInstance()
+   {
+      {
+         if (instance == null)
+         {
+             //Debug.Log("Got to instance fine");
+             instance = new IdleState();
+             //Debug.Log(instance);
+            
+         }
+         return instance;
+      }
+   }
+
+   
+
+    // Singleton Pattern
+
+    //private static IdleState instance = new IdleState();
+    //public static IdleState getInstance { get { return instance; } }
+
+    private IdleState()
     {
-        _inst = this;
+
     }
 
-
-    public override void Enter(BasicEnemy entity)
+    void StateBasicEnemy.Enter(BasicEnemy entity)
     {
-        Debug.Log("Entering Idle");
+        //Debug.Log("Entering Idle");
     }
 
-    public override void Execute(BasicEnemy entity)
+    void StateBasicEnemy.Execute(BasicEnemy entity)
     {
-        Debug.Log("Idleing");
-        Debug.Log("Changing state to attacking");
-        entity.fsm.ChangeState(IdleState._inst);
+        //Debug.Log("Idleing");
+        //Debug.Log("Changing state to Idle");
+        entity.Idle();
+        entity.fsm.ChangeState(AttackState.getInstance);
     }
 
-    public override void Exit(BasicEnemy entity)
+    void StateBasicEnemy.Exit(BasicEnemy entity)
     {
-        Debug.Log("Exiting Idle");
+        //Debug.Log("Exiting Idle");
     }
 }

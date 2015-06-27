@@ -1,10 +1,10 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿//using UnityEngine;
+//using System.Collections;
 
-public abstract class StateBasicEnemy {
+public interface StateBasicEnemy {
 
-    public abstract void Enter(BasicEnemy entity);
-    public abstract void Execute(BasicEnemy entity);
-    public abstract void Exit(BasicEnemy entity);
+    void Enter(BasicEnemy entity);
+    void Execute(BasicEnemy entity);
+    void Exit(BasicEnemy entity);
 
 }

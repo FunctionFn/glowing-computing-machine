@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿//using UnityEngine;
+//using System.Collections;
 
 public class FSMBasicEnemy {
 
@@ -9,7 +9,6 @@ public class FSMBasicEnemy {
 
     public FSMBasicEnemy( BasicEnemy ent ) {
         this.entity = ent;
-        
     }
 
     public void Update()
@@ -20,7 +19,7 @@ public class FSMBasicEnemy {
         }
         else
         {
-            ChangeState(IdleState.Inst);
+            ChangeState(IdleState.getInstance());
         }
     }
 
@@ -31,6 +30,8 @@ public class FSMBasicEnemy {
         if(currentState != null)
             currentState.Exit(entity);
         currentState = newState;
+        //Debug.Log(entity);
+        //Debug.Log(newState);
         currentState.Enter(entity);
         currentState.Execute(entity);
     }
