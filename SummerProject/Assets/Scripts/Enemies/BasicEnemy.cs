@@ -54,7 +54,7 @@ public class BasicEnemy : Enemy
 
     public void Roar()
     {
-        Debug.Log("Finished attacking, time to ROOAAR!!");
+        Debug.Log("Finished attacking, time to roar!");
     }
 
 }

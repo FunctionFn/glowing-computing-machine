@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour {
     public Transform rightSide;
     public Transform fireballSpawnLocation;
     public Transform windSpawnLocation;
+    public Transform cameraAxisLocation;
 
     private GameObject tempWind;
 
@@ -27,7 +28,8 @@ public class PlayerController : MonoBehaviour {
     public float lookSpeedV;
     private Vector3 moveDirection = Vector3.zero;
     private Vector3 lookDirectionH = Vector3.zero;
-    private float lookDirectionV;
+    private Vector3 lookDirectionV = Vector3.zero;
+    //private float lookDirectionV;
     CharacterController controller;
     
 
@@ -167,12 +169,31 @@ public class PlayerController : MonoBehaviour {
     void CameraControl()
     {
         lookDirectionH = new Vector3(0, Input.GetAxis("Horizontal2"), 0);
-        lookDirectionV = Input.GetAxis("Vertical2") * lookSpeedV;
-
         transform.Rotate(lookDirectionH * lookSpeedH);
 
+
+        lookDirectionV = new Vector3(Input.GetAxis("Vertical2"), 0, 0);
+        cameraAxisLocation.Rotate(lookDirectionV * lookSpeedV);
+        Debug.Log(cameraAxisLocation.rotation.eulerAngles.x);
+
+        if (cameraAxisLocation.rotation.eulerAngles.x > 270)
+        {
+            cameraAxisLocation.localEulerAngles = new Vector3(Mathf.Clamp(cameraAxisLocation.rotation.eulerAngles.x, 280, 400), cameraAxisLocation.rotation.y, cameraAxisLocation.rotation.z);
+        }
+        else
+        {
+            cameraAxisLocation.localEulerAngles = new Vector3(Mathf.Clamp(cameraAxisLocation.rotation.eulerAngles.x, -10, 80), cameraAxisLocation.rotation.y, cameraAxisLocation.rotation.z);
+        }
+
+
+        
+
+        /*
+        lookDirectionV = Input.GetAxis("Vertical2") * lookSpeedV;
         cameraRotationAxis = rightSide.position - transform.position;
         mainCamera.transform.RotateAround(transform.position, cameraRotationAxis, lookDirectionV);
+         */
+
     }
 
     void HorizontalMoveControl()
