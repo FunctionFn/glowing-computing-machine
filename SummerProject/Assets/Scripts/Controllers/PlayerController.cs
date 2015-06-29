@@ -49,6 +49,7 @@ public class PlayerController : MonoBehaviour {
     public int NoMovement = 0;
     public int GroundedMovement = 1;
     public int TetheredMovement = 2;
+    public int DashMovement = 3;
 
     public int movementState;
 
@@ -112,6 +113,11 @@ public class PlayerController : MonoBehaviour {
         {
             controller.height = 1;
             controller.center = new Vector3(0, 0, 0);
+        }
+        else if (state == DashMovement)
+        {
+            controller.height = 2;
+            controller.center = new Vector3(0, -0.5f, 0);
         }
     }
 
@@ -270,6 +276,13 @@ public class PlayerController : MonoBehaviour {
         {
             Dash();
             DashTimer += Time.deltaTime;
+
+            
+            if (DashTimer > DashTime)
+            {
+                EndDash();
+            }
+            
         }
 
         
@@ -314,13 +327,19 @@ public class PlayerController : MonoBehaviour {
     void StartDash()
     {
         DashTimer = 0;
+        dashDirection = transform.forward;
+        dashDirection *= dashSpeed;
+        ChangeMovementState(DashMovement);
     }
 
     void Dash()
     {
-        dashDirection = transform.forward;
-        dashDirection *= dashSpeed;
         controller.Move(dashDirection * Time.deltaTime);
 
+    }
+
+    void EndDash()
+    {
+        ChangeMovementState(GroundedMovement);
     }
 }
