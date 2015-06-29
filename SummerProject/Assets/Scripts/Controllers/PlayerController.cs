@@ -40,6 +40,8 @@ public class PlayerController : MonoBehaviour {
 
     public float DashTimer;
     public float DashTime;
+    public float DashCooldownTimer;
+    public float DashCooldown;
 
 
     //*State Management*
@@ -285,6 +287,8 @@ public class PlayerController : MonoBehaviour {
             
         }
 
+        DashCooldownTimer += Time.deltaTime;
+
         
         
 
@@ -326,10 +330,15 @@ public class PlayerController : MonoBehaviour {
 
     void StartDash()
     {
-        DashTimer = 0;
-        dashDirection = transform.forward;
-        dashDirection *= dashSpeed;
-        ChangeMovementState(DashMovement);
+
+        if (DashCooldownTimer > DashCooldown)
+        {
+            DashTimer = 0;
+            dashDirection = transform.forward;
+            dashDirection *= dashSpeed;
+            ChangeMovementState(DashMovement);
+            DashCooldownTimer = 0;
+        }
     }
 
     void Dash()
