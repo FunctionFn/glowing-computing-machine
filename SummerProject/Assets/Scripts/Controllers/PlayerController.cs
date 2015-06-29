@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour {
     private GameObject tempWind;
 
     public float speed;
+    public float dashSpeed;
     public float jumpSpeed;
     public float ascendSpeed;
     public float descendSpeed;
@@ -29,11 +30,17 @@ public class PlayerController : MonoBehaviour {
     private Vector3 moveDirection = Vector3.zero;
     private Vector3 lookDirectionH = Vector3.zero;
     private Vector3 lookDirectionV = Vector3.zero;
+    private Vector3 dashDirection = Vector3.zero;
     //private float lookDirectionV;
     CharacterController controller;
-    
 
     private Vector3 cameraRotationAxis;
+
+    //*Timers*
+
+    public float DashTimer;
+    public float DashTime;
+
 
     //*State Management*
 
@@ -68,6 +75,8 @@ public class PlayerController : MonoBehaviour {
         bIsNearTree = false;
 
         Physics.IgnoreLayerCollision(12, gameObject.layer);
+
+        DashTimer = DashTime;
 	}
 	
 	// Update is called once per frame
@@ -257,7 +266,14 @@ public class PlayerController : MonoBehaviour {
         }
 
         //Dash Timer
+        if (DashTimer < DashTime)
+        {
+            Dash();
+            DashTimer += Time.deltaTime;
+        }
 
+        
+        
 
 
     }
@@ -297,11 +313,14 @@ public class PlayerController : MonoBehaviour {
 
     void StartDash()
     {
-
+        DashTimer = 0;
     }
 
     void Dash()
     {
+        dashDirection = transform.forward;
+        dashDirection *= dashSpeed;
+        controller.Move(dashDirection * Time.deltaTime);
 
     }
 }
