@@ -162,6 +162,7 @@ public class PlayerController : MonoBehaviour {
                 UnTether();
             }
 
+
         }
         
     }
@@ -249,6 +250,16 @@ public class PlayerController : MonoBehaviour {
         {
             UnWindBlow(tempWind);
         }
+
+        if (Input.GetButtonDown("Dash"))
+        {
+            StartDash();
+        }
+
+        //Dash Timer
+
+
+
     }
 
     void Fireball()
@@ -280,5 +291,17 @@ public class PlayerController : MonoBehaviour {
     void UnWindBlow(GameObject go)
     {
         Destroy(go.gameObject);
+    }
+
+    // To Do:
+
+    void StartDash()
+    {
+
+    }
+
+    void Dash()
+    {
+
     }
 }
