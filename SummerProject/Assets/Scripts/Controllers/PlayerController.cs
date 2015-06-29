@@ -174,7 +174,7 @@ public class PlayerController : MonoBehaviour {
 
         lookDirectionV = new Vector3(Input.GetAxis("Vertical2"), 0, 0);
         cameraAxisLocation.Rotate(lookDirectionV * lookSpeedV);
-        Debug.Log(cameraAxisLocation.rotation.eulerAngles.x);
+        //Debug.Log(cameraAxisLocation.rotation.eulerAngles.x);
 
         if (cameraAxisLocation.rotation.eulerAngles.x > 270)
         {
