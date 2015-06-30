@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
     public Transform cameraAxisLocation;
 
     private GameObject tempWind;
+    private GameObject tempWindDash;
 
     public float speed;
     public float dashSpeed;
@@ -20,6 +21,8 @@ public class PlayerController : MonoBehaviour {
     public float ascendSpeed;
     public float descendSpeed;
     public float gravity;
+    public float windForce;
+    public float dashWindForce;
 
     public float fireballSpeed;
     public float fireballDamage;
@@ -40,6 +43,8 @@ public class PlayerController : MonoBehaviour {
 
     public float DashTimer;
     public float DashTime;
+    public float DashCooldownTimer;
+    public float DashCooldown;
 
 
     //*State Management*
@@ -78,6 +83,7 @@ public class PlayerController : MonoBehaviour {
         Physics.IgnoreLayerCollision(12, gameObject.layer);
 
         DashTimer = DashTime;
+        DashCooldownTimer = DashCooldown;
 	}
 	
 	// Update is called once per frame
@@ -258,7 +264,7 @@ public class PlayerController : MonoBehaviour {
         
         if (Input.GetButtonDown("Wind"))
         {
-            tempWind = WindBlow();
+            tempWind = WindBlow(windForce, false);
         }
 
         if (Input.GetButtonUp("Wind"))
@@ -285,7 +291,8 @@ public class PlayerController : MonoBehaviour {
             
         }
 
-        
+        if(DashCooldownTimer <= DashCooldown)
+            DashCooldownTimer += Time.deltaTime;
         
 
 
@@ -307,12 +314,22 @@ public class PlayerController : MonoBehaviour {
         ChangeMovementState(GroundedMovement);
     }
 
-    GameObject WindBlow()
+    GameObject WindBlow(float force, bool Dash)
     {
         GameObject go = (GameObject)Instantiate(windPrefab, windSpawnLocation.position, mainCamera.transform.rotation);
 
-        go.transform.Rotate(new Vector3(350, 0, 0));
-        go.transform.parent = mainCamera.transform;
+
+
+        go.GetComponentInChildren<Wind>().windForce = force;
+        if (!Dash)
+        {
+            go.transform.parent = mainCamera.transform;
+            go.transform.Rotate(new Vector3(350, 0, 0));
+        }
+        else
+        {
+            go.transform.localEulerAngles = new Vector3(0, go.transform.localEulerAngles.y, go.transform.localEulerAngles.z);
+        }
 
         return go;
     }
@@ -326,10 +343,15 @@ public class PlayerController : MonoBehaviour {
 
     void StartDash()
     {
-        DashTimer = 0;
-        dashDirection = transform.forward;
-        dashDirection *= dashSpeed;
-        ChangeMovementState(DashMovement);
+        if (DashCooldownTimer > DashCooldown)
+        {
+            DashTimer = 0;
+            dashDirection = transform.forward;
+            dashDirection *= dashSpeed;
+            tempWindDash = WindBlow(dashWindForce, true);
+            ChangeMovementState(DashMovement);
+            DashCooldownTimer = 0;
+        }
     }
 
     void Dash()
@@ -341,5 +363,6 @@ public class PlayerController : MonoBehaviour {
     void EndDash()
     {
         ChangeMovementState(GroundedMovement);
+        UnWindBlow(tempWindDash);
     }
 }

@@ -8,7 +8,6 @@ public class Wind : MonoBehaviour {
     public float windForce;
 
     public float windForceDistanceModifier; // higher modifier, the more Distance affects the power of the wind.
-
 	void Start () {
 	
 	}
